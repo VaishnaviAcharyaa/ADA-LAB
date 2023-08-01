@@ -1,0 +1,19 @@
+int maximalSquare(char** matrix, int matrixSize, int* matrixColSize) {
+	int dp[matrixSize][*matrixColSize];
+	memset(dp, 0, sizeof(dp));
+	dp[0][0] = matrix[0][0] - '0';
+	int res = dp[0][0] ? 1 : 0;
+	for (int i = 1, len = *matrixColSize; i < len; i++)
+		if (matrix[0][i] == '1') dp[0][i] = 1, res = 1;
+	for (int i = 1, len = matrixSize; i < len; i++)
+		if (matrix[i][0] == '1') dp[i][0] = 1, res = 1;
+
+	for (int row = 1; row < matrixSize; row++)
+		for (int col = 1, len = *matrixColSize; col < len; col++)
+			if (matrix[row][col] == '1') {
+				dp[row][col] = fmin(dp[row][col - 1], fmin(dp[row - 1][col], dp[row - 1][col - 1])) + 1;
+				res = fmax(res, dp[row][col]);
+			}
+            
+	return res * res;
+}
